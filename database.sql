@@ -39,3 +39,37 @@ CREATE TABLE rentals (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+    CREATE TABLE IF NOT EXISTS payments (
+      id SERIAL PRIMARY KEY,
+      rental_id INTEGER REFERENCES rentals(id),
+      amount DECIMAL(10, 2) NOT NULL,
+      method VARCHAR(50) NOT NULL,
+      status VARCHAR(20) DEFAULT 'pending',
+      paid_at TIMESTAMP,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS maintenance (
+      id SERIAL PRIMARY KEY,
+      equipment_id INTEGER REFERENCES equipment(id),
+      description TEXT,
+      status VARCHAR(20) DEFAULT 'scheduled',
+      start_date DATE,
+      end_date DATE,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS notifications (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id),
+      channel VARCHAR(20) NOT NULL,
+      recipient VARCHAR(100) NOT NULL,
+      subject VARCHAR(255),
+      message TEXT NOT NULL,
+      status VARCHAR(20) DEFAULT 'sent',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+
+
