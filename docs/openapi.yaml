@@ -1,0 +1,356 @@
+openapi: 3.0.3
+info:
+  title: Manufacture Rental API
+  version: 1.0.0
+  description: API management untuk rental alat berat.
+servers:
+  - url: http://localhost:8080
+    description: Local
+
+tags:
+  - name: Users
+  - name: Equipment
+  - name: Rentals
+  - name: Payments
+  - name: Maintenance
+  - name: Notifications
+  - name: Reports
+
+paths:
+  /api/users/register:
+    post:
+      tags: [Users]
+      summary: Register user baru
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+      responses:
+        '201':
+          description: User berhasil dibuat
+
+  /api/users/login:
+    post:
+      tags: [Users]
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login berhasil
+
+  /api/users/{id}:
+    delete:
+      tags: [Users]
+      summary: Hapus user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: uint64
+      responses:
+        '200':
+          description: User terhapus
+
+  /api/equipment:
+    post:
+      tags: [Equipment]
+      summary: Buat equipment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEquipmentRequest'
+      responses:
+        '201':
+          description: Equipment dibuat
+    get:
+      tags: [Equipment]
+      summary: List equipment
+      responses:
+        '200':
+          description: OK
+
+  /api/equipment/{id}:
+    get:
+      tags: [Equipment]
+      summary: Detail equipment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: uint64
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags: [Equipment]
+      summary: Hapus equipment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: uint64
+      responses:
+        '200':
+          description: Deleted
+
+  /api/rentals:
+    post:
+      tags: [Rentals]
+      summary: Buat rental
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRentalRequest'
+      responses:
+        '201':
+          description: Rental dibuat
+    get:
+      tags: [Rentals]
+      summary: List rentals
+      responses:
+        '200':
+          description: OK
+
+  /api/rentals/{id}:
+    get:
+      tags: [Rentals]
+      summary: Detail rental
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: uint64
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags: [Rentals]
+      summary: Hapus rental
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: uint64
+      responses:
+        '200':
+          description: Deleted
+
+  /api/payments:
+    post:
+      tags: [Payments]
+      summary: Buat payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequest'
+      responses:
+        '201':
+          description: Payment dibuat
+    get:
+      tags: [Payments]
+      summary: List payments
+      responses:
+        '200':
+          description: OK
+
+  /api/payments/{id}:
+    get:
+      tags: [Payments]
+      summary: Detail payment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: uint64
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags: [Payments]
+      summary: Hapus payment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: uint64
+      responses:
+        '200':
+          description: Deleted
+
+  /api/maintenance:
+    post:
+      tags: [Maintenance]
+      summary: Buat jadwal maintenance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMaintenanceRequest'
+      responses:
+        '201':
+          description: Maintenance dibuat
+    get:
+      tags: [Maintenance]
+      summary: List maintenance
+      responses:
+        '200':
+          description: OK
+
+  /api/notifications:
+    post:
+      tags: [Notifications]
+      summary: Buat notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNotificationRequest'
+      responses:
+        '201':
+          description: Notification dibuat
+    get:
+      tags: [Notifications]
+      summary: List notifications
+      responses:
+        '200':
+          description: OK
+
+  /api/reports/dashboard:
+    get:
+      tags: [Reports]
+      summary: Dashboard report
+      responses:
+        '200':
+          description: OK
+
+components:
+  schemas:
+    UserRegisterRequest:
+      type: object
+      required: [username, email, password]
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        full_name:
+          type: string
+        phone:
+          type: string
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    CreateEquipmentRequest:
+      type: object
+      required: [category_id, name, daily_rate]
+      properties:
+        category_id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        daily_rate:
+          type: number
+          format: double
+        status:
+          type: string
+          enum: [available, rented, maintenance]
+
+    CreateRentalRequest:
+      type: object
+      required: [user_id, equipment_id, rental_date, return_date]
+      properties:
+        user_id:
+          type: integer
+        equipment_id:
+          type: integer
+        rental_date:
+          type: string
+          example: 2026-03-06
+        return_date:
+          type: string
+          example: 2026-03-10
+
+    CreatePaymentRequest:
+      type: object
+      required: [rental_id, amount, method]
+      properties:
+        rental_id:
+          type: integer
+        amount:
+          type: number
+          format: double
+        method:
+          type: string
+
+    CreateMaintenanceRequest:
+      type: object
+      required: [equipment_id, description, start_date, end_date]
+      properties:
+        equipment_id:
+          type: integer
+        description:
+          type: string
+        start_date:
+          type: string
+          example: 2026-03-06
+        end_date:
+          type: string
+          example: 2026-03-08
+
+    CreateNotificationRequest:
+      type: object
+      required: [user_id, channel, recipient, message]
+      properties:
+        user_id:
+          type: integer
+        channel:
+          type: string
+          enum: [email, sms, whatsapp]
+        recipient:
+          type: string
+        subject:
+          type: string
+        message:
+          type: string
