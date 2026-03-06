@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/andrewidianto12/Manufacture-Rental/app/rental-manufacture/handler"
+	authmiddleware "github.com/andrewidianto12/Manufacture-Rental/app/rental-manufacture/middleware"
 	customvalidator "github.com/andrewidianto12/Manufacture-Rental/app/rental-manufacture/validator"
 	"github.com/andrewidianto12/Manufacture-Rental/database"
 	equipment_repo "github.com/andrewidianto12/Manufacture-Rental/repository/equipment"
@@ -114,12 +115,19 @@ func main() {
 </html>`)
 	})
 
-	api := e.Group("/api")
+	apiPublic := e.Group("/api")
 	{
-		usersGroup := api.Group("/users")
+		usersGroup := apiPublic.Group("/users")
 		{
 			usersGroup.POST("/register", userHandler.RegisterUser)
 			usersGroup.POST("/login", userHandler.LoginUser)
+		}
+	}
+
+	api := e.Group("/api", authmiddleware.JWTMiddleware())
+	{
+		usersGroup := api.Group("/users")
+		{
 			usersGroup.DELETE("/:id", userHandler.DeleteUser)
 		}
 
