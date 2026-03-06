@@ -1,0 +1,318 @@
+{
+  "info": {
+    "name": "Manufacture Rental API",
+    "description": "Postman collection untuk API management Manufacture Rental.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "userId", "value": "1" },
+    { "key": "categoryId", "value": "1" },
+    { "key": "equipmentId", "value": "1" },
+    { "key": "rentalId", "value": "1" },
+    { "key": "paymentId", "value": "1" },
+    { "key": "accessToken", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Swagger",
+      "item": [
+        {
+          "name": "Swagger UI",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/swagger"
+          }
+        },
+        {
+          "name": "OpenAPI YAML",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/swagger/openapi.yaml"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"andrewidianto12\",\n  \"email\": \"andrewidianto12@gmail.com\",\n  \"password\": \"password123\",\n  \"full_name\": \"Andre Widianto\",\n  \"phone\": \"081110018601\"\n}"
+            },
+            "url": "{{baseUrl}}/api/users/register"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json && json.token) {",
+                  "  pm.collectionVariables.set('accessToken', json.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"andrewidianto12@gmail.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/users/login"
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{accessToken}}", "disabled": true }
+            ],
+            "url": "{{baseUrl}}/api/users/{{userId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Equipment Categories",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Excavators\",\n  \"description\": \"Heavy excavation equipment\"\n}"
+            },
+            "url": "{{baseUrl}}/api/equipment-categories"
+          }
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/equipment-categories"
+          }
+        },
+        {
+          "name": "Get Category By ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/equipment-categories/{{categoryId}}"
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/equipment-categories/{{categoryId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Equipment",
+      "item": [
+        {
+          "name": "Create Equipment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category_id\": 1,\n  \"name\": \"CAT 320\",\n  \"description\": \"Hydraulic excavator\",\n  \"daily_rate\": 2500000,\n  \"status\": \"available\"\n}"
+            },
+            "url": "{{baseUrl}}/api/equipment"
+          }
+        },
+        {
+          "name": "Get All Equipment",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/equipment"
+          }
+        },
+        {
+          "name": "Get Equipment By ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/equipment/{{equipmentId}}"
+          }
+        },
+        {
+          "name": "Delete Equipment",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/equipment/{{equipmentId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rentals",
+      "item": [
+        {
+          "name": "Create Rental",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"equipment_id\": 1,\n  \"rental_date\": \"2026-03-10\",\n  \"return_date\": \"2026-03-15\"\n}"
+            },
+            "url": "{{baseUrl}}/api/rentals"
+          }
+        },
+        {
+          "name": "Get All Rentals",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/rentals"
+          }
+        },
+        {
+          "name": "Get Rental By ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/rentals/{{rentalId}}"
+          }
+        },
+        {
+          "name": "Delete Rental",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/rentals/{{rentalId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Create Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rental_id\": 1,\n  \"amount\": 12500000,\n  \"method\": \"bank_transfer\"\n}"
+            },
+            "url": "{{baseUrl}}/api/payments"
+          }
+        },
+        {
+          "name": "Get All Payments",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/payments"
+          }
+        },
+        {
+          "name": "Get Payment By ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/payments/{{paymentId}}"
+          }
+        },
+        {
+          "name": "Delete Payment",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/payments/{{paymentId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Maintenance",
+      "item": [
+        {
+          "name": "Create Maintenance",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"equipment_id\": 1,\n  \"description\": \"Periodic service\",\n  \"start_date\": \"2026-03-12\",\n  \"end_date\": \"2026-03-14\"\n}"
+            },
+            "url": "{{baseUrl}}/api/maintenance"
+          }
+        },
+        {
+          "name": "Get All Maintenance",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/maintenance"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Create Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1,\n  \"channel\": \"email\",\n  \"recipient\": \"andrewtest@mail.com\",\n  \"subject\": \"Reminder\",\n  \"message\": \"Rental Anda akan jatuh tempo\"\n}"
+            },
+            "url": "{{baseUrl}}/api/notifications"
+          }
+        },
+        {
+          "name": "Get All Notifications",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/notifications"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Get Dashboard Report",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/reports/dashboard"
+          }
+        }
+      ]
+    }
+  ]
+}
