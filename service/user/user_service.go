@@ -2,6 +2,7 @@ package user_service
 
 import (
 	"errors"
+	"log"
 	"strings"
 
 	"github.com/andrewidianto12/Manufacture-Rental/util"
@@ -51,6 +52,10 @@ func (s *userService) RegisterUser(input UserRegisterRequest) (*User, error) {
 	err = s.repo.RegisterUser(user)
 	if err != nil {
 		return nil, err
+	}
+
+	if emailErr := util.SendRegistrationEmail(user.Email, user.Fullname, user.Username); emailErr != nil {
+		log.Printf("warning: failed to send registration email to %s: %v", user.Email, emailErr)
 	}
 
 	return user, nil
